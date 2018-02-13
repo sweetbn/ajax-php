@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>爱旅游</title>
+	<style type="text/css">
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		.main{
+			background-image: url(img/pic03.jpg);
+			background-attachment: fixed;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center,center;
+			width: 1366px;
+			height: 700px;
+			position: fixed;
+			top: 0;
+		}
+		.zhuce{
+			width: 350px;
+			height: 230px;
+			margin:200px auto;
+			background-color: #fff;
+			/*text-align: center;*/
+			border-radius: 3px;
+			padding: 15px;
+		}
+		.zhuce h2{
+			font-family: '宋体';
+			color: green;
+		}
+		.zhuce h2 span{
+			color: orange;
+		}
+		.inner{
+			margin: 60px auto;
+			width:300px;
+		}
+		.inner #text{
+			width: 150px;
+			height: 22px;
+		}
+
+		.inner #btn{
+			display: block;
+			width: 85px;
+			height: 30px;
+			margin: 30px auto;
+			background-color: grey;
+			border-radius: 5px;
+			color: #fff;
+		}
+		#tishi{
+			color: red;
+			font-size: 14px;
+			display: block;
+			width: 150px;
+			margin:5px auto;
+		}
+
+		.cover{
+			background-color: rgba(0,0,0,0.5);
+			width: 1366px;
+			height: 700px;
+			position: fixed;
+			left: 0;
+			top: 0;
+			display: none;
+		}
+
+
+
+		.spinner{
+	    	width: 80px;
+	    	height: 50px;
+	    	text-align: center;
+	    	margin: 250px auto;
+	    }
+		.spinner span{
+			height: 100%;
+			width: 6px;
+			background-color: #ccc;
+			display: inline-block;
+			animation:strechdelay 1.2s ease-in-out infinite;
+		}
+		.spinner .line2{/*前面加上spinner才有效*/
+			-webkit-animation-delay: -1.1s;
+		}
+		.spinner .line3{
+			-webkit-animation-delay: -1.0s;
+		}
+		.spinner .line4{
+			-webkit-animation-delay: -0.9s;
+		}
+		.spinner .line5{
+			-webkit-animation-delay: -0.8s;
+		}
+		@keyframes strechdelay{
+			0%,40%,100%{transform: scaleY(0.4);}/*在百分之0、40、100几个时间点时候缩放到20px*/
+			20%{transform: scaleY(1);}/*在百分之20时间点的时候缩放至100%*/
+		}
+	</style>
+</head>
+<body>
+<div class="main">
+	
+	<div class="zhuce">
+		<h2><span>爱</span>旅行</h2>
+		<div class="inner">
+			<span>用户名：</span>
+			<input type="textbox" placeholder="请输入注册名" id="text">
+			<span id="tishi"></span>
+			<input type="button" value="注册" id="btn">
+		</div>
+		
+	</div>
+</div>
+
+<div class="cover">
+	<div class="spinner">
+			<span class="line1"></span>
+			<span class="line2"></span>
+			<span class="line3"></span>
+			<span class="line4"></span>
+			<span class="line5"></span>
+		</div>
+</div>
+
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+
+<script type="text/javascript">
+	$(function(){
+		$('#text').blur(function(){
+			if ($('#text').val()=='') {
+				return;
+			}
+			$('.cover').show();
+			$.ajax({
+				url:'main.php',
+				data:'name='+$('#text').val(),
+				// type:'get',
+				success:function(data){
+					$('.cover').hide();
+					// console.log(data.message);
+					$('#tishi').text(data.message);
+					$('#tishi').show().delay(1000).fadeOut(1000);
+					if (data.status=='can') {
+						$('#btn').css('backgroundColor','green');
+					}
+					if (data.status=='cannot') {
+						$('#btn').css('backgroundColor','grey');
+					}
+				}
+			});
+		});
+
+		$('#btn').click(function(){
+			if ($('#btn').css('backgroundColor')=='grey') {
+				alert('别点了');
+				return;
+			}
+			else{
+				$('.cover').show();
+				$.ajax({
+					url:'main.php',
+					data:'newname='+$('#text').val(),
+					success:function(data){
+						$('.cover').hide();
+						console.log(data);
+						$('#tishi').text(data).show().delay(3000).fadeOut(1000);
+						$('#text').val('');
+						$('#btn').css('backgroundColor','grey');
+					},
+					error:function(){
+						console.log('失败了哦');
+					}
+				})
+			}
+		});
+	});
+</script>
+</body>
+</html>
