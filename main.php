@@ -1,6 +1,7 @@
 <?php 
 sleep(1);
 header('Content-Type:application/json');
+header("content-type:text/html;charset=utf-8");
 
 $users = array('张三','李四','王二麻','哈哈','呵呵' );
 
